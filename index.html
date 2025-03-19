@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trato Especial</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #befffa;
+        }
+        #container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            margin-top: 50px;
+        }
+        .boton {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            color: white;
+            background-color: #28a745;
+            transition: 0.3s;
+        }
+        .boton:hover {
+            background-color: #218838;
+        }
+        #no {
+            position: absolute;
+            background-color: #dc3545;
+        }
+        #no:hover {
+            background-color: #c82333;
+        }
+        #adivinanza-container, #respuesta-container, #imagen-container, #dialogo {
+            display: none;
+        }
+        #cuadro-dialogo {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h4>Hola Fer, espero tu dia valla bien, espero te gusten las galletas pero antes....</h4>
+        <h1>Te propongo un trato:</h1>
+        <p>Si adivinas esta adivinanza, te debo una miche 🍺, pero si fallas, me gano un abrazo tuyo 🤗 ¿Qué dices?</p>
+        <button class="boton" onclick="aceptarTrato()">Va, acepto</button>
+        <button class="boton" id="no" onmouseover="moverBoton()" onclick="advertirNo()">Nel, asi estoy bien</button>
+    </div>
+    
+    <div id="dialogo">
+        <p>Sabía que accederías jaja</p>
+        <button class="boton" onclick="iniciarAdivinanza()">Vamos con la adivinanza</button>
+    </div>
+    
+    <div id="adivinanza-container">
+        <p>¿Qué es de color verde y pica? 🤭</p>
+        <input type="text" id="respuesta" placeholder="Escribe tu respuesta">
+        <button class="boton" onclick="verificarRespuesta()">Ver respuesta</button>
+    </div>
+    
+    <div id="respuesta-container">
+        <p id="mensaje-respuesta"></p>
+        <button class="boton" onclick="mostrarImagen()">Por ultimo toca aqui</button>
+    </div>
+    
+    <div id="imagen-container">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQHgTShOz1LdLNUQeIVrcEB3xcH-avDGZyWF4xMOdVdmt6hyXo9fCzfqF_lLqH4dgmRnk&usqp=CAU">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAY9fD2MVVcabVwBiWVap2phVeXSdk9LKx3qV3QF8pkjL3HUhQ2_8czfNSjkzED5ovp2s&usqp=CAU">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSja0gKAUwiJ09cWVwBa4NfJvRHH4k5HVzjJg&s">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTq75BaKcqmJLSIu61uXrX-jUB2O3_OwvRcBQ&s">
+    </div>
+    
+    <div id="cuadro-dialogo">
+        <p id="cuenta-regresiva"></p>
+    </div>
+    
+    <script>
+        let intentos = 0;
+        
+        function aceptarTrato() {
+            document.getElementById("dialogo").style.display = "block";
+        }
+        
+        function iniciarAdivinanza() {
+            document.getElementById("dialogo").style.display = "none";
+            document.getElementById("adivinanza-container").style.display = "block";
+        }
+        
+        function verificarRespuesta() {
+            let respuesta = document.getElementById("respuesta").value.toLowerCase();
+            let correcta = "una rana con un tenedor";
+            
+            if (respuesta === correcta) {
+                alert("Naaa Fer, hiciste trampaaaa 🙄");
+                document.getElementById("mensaje-respuesta").innerHTML = "La respuesta correcta es: <strong>Una rana con un tenedor 🐸🍴 (lo se mal chiste JAJAAJ)</strong>";
+                document.getElementById("respuesta-container").style.display = "block";
+            } else {
+                intentos++;
+                if (intentos === 1) {
+                    alert("Ah nop, intenta de nuevo...");
+                } else if (intentos === 2) {
+                    alert("Bueno, una más, nomas porque me caes bien...");
+                } else if (intentos === 3) {
+                    alert("La última y ya, eh...");
+                } else {
+                    iniciarCuentaRegresiva();
+                }
+            }
+        }
+        
+        function iniciarCuentaRegresiva() {
+            let contador = 5;
+            let cuadroDialogo = document.getElementById("cuadro-dialogo");
+            let cuentaRegresiva = document.getElementById("cuenta-regresiva");
+            cuadroDialogo.style.display = "block";
+            
+            let intervalo = setInterval(() => {
+                cuentaRegresiva.innerHTML = `La respuesta correcta es... ${contador}`;
+                contador--;
+                
+                if (contador < 0) {
+                    clearInterval(intervalo);
+                    cuadroDialogo.style.display = "none";
+                    document.getElementById("mensaje-respuesta").innerHTML = "<strong>Una rana con un tenedor 🐸🍴 (lo se mal chiste JAJAAJ)</strong>";
+                    document.getElementById("respuesta-container").style.display = "block";
+                }
+            }, 1000);
+        }
+        
+        function moverBoton() {
+            let botonNo = document.getElementById("no");
+            let x = Math.random() * (window.innerWidth - 150);
+            let y = Math.random() * (window.innerHeight - 100);
+            botonNo.style.left = `${x}px`;
+            botonNo.style.top = `${y}px`;
+        }
+        
+        function advertirNo() {
+            alert("Te estoy viendo eh?🙄😢jajaja");
+        }
+        
+        function mostrarImagen() {
+            document.getElementById("imagen-container").style.display = "block";
+            setTimeout(() => {
+                alert("Soy de sistemas que se podia esperar jaja. Espero haberte sacado una sonrisa y ten bonito dia asi como tu, byeeee :)");
+            }, 5000);
+        }
+        
+        window.onbeforeunload = function() {
+            return "Espero te haya sacado una sonrisa. ¡Ten bonito día! Byeee!";
+        };
+    </script>
+</body>
+</html>
